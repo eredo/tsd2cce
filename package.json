@@ -1,5 +1,5 @@
 {
-  "name": "ts2cce",
+  "name": "tsd2cce",
   "version": "0.1.0",
   "description": "Converter to generate google closure compiler extern files from typescript declaration files (.d.ts).",
   "main": "index.js",
@@ -8,7 +8,7 @@
     "bin": "bin"
   },
   "bin": {
-    "ts2cee": "./bin/ts2cee"
+    "ts2cee": "./bin/tsd2cee"
   },
   "engines": {
     "node": ">=4.0.0"
@@ -39,7 +39,8 @@
     "closure",
     "externs",
     "externs",
-    "d.ts"
+    "d.ts",
+    "tsd"
   ],
   "author": "Eric Schneller <eric@schnellers.name>",
   "license": "MIT"

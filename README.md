@@ -1,11 +1,11 @@
-# ts2cce
+# tsd2cce
 
 A converter for google closure compiler externs from typescript declaration files (.d.ts).
 
 
 ### Installation
 ```
-npm install -g ts2cce
+npm install -g tsd2cce
 ```
 
 ### Usage

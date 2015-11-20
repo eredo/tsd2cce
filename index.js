@@ -13,7 +13,7 @@ let argv = require('optimist')
     }
   })
   .boolean('strict')
-  .usage('Usage: ts2cee [definition file] [externs file]')
+  .usage('Usage: tsd2cee [definition file] [externs file]')
   .demand(2)
   .argv;
 
