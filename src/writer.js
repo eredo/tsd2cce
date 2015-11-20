@@ -157,6 +157,11 @@ ${node.qualifiedName}${expr};
       return `(${type.join('|')})${node.isOptional ? '=' : ''}`;
     }
 
+    if (typeof type === 'object') {
+      return '{' + Object.keys(type).map(k =>
+          `${k}: ${Writer.typeToString(type[k].type, type[k])}`).join(', ') + '}';
+    }
+
     return type + (node.isOptional ? '=' : '');
   }
 }

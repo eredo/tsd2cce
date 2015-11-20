@@ -93,7 +93,7 @@ describe('Parser', function() {
   it('AST should contain the property', function() {
     let property = parser.ast['TestModule']['TestClass']['#']['property'];
     isProperty(property);
-    expect(property.type).to.equal('Object<string,number>');
+    expect(property.type).to.equal('Object<string,Array<number>>');
   });
 
   it('AST should contain the variable', function() {

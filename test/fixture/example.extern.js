@@ -24,9 +24,15 @@ TestModule.TestClass.staticMethod = function() {};
 
 
 /**
- * @type {Object<string,number>}
+ * @type {Object<string,Array<number>>}
  */
 TestModule.TestClass.prototype.property;
+
+
+/**
+ * @type {{name: string, data: number=}}
+ */
+TestModule.TestClass.prototype.object;
 
 
 /**

@@ -81,6 +81,9 @@ class Parser {
         case ts.SyntaxKind.PropertyDeclaration:
           self.defineProperty(node);
           break;
+        case ts.SyntaxKind.PropertySignature:
+          self.definePropertySignature(node);
+          break;
         case ts.SyntaxKind.VariableDeclaration:
           self.defineVariable(node);
           break;
@@ -310,6 +313,16 @@ class Parser {
     this.appendType_(property, node);
   }
 
+  definePropertySignature(/** ts.PropertySignature */node) {
+    let property = this.initNodeMemberNamespace_(node.parent.parent, NodeKind.PROPERTY);
+    if (typeof property.type !== 'object') {
+      property.type = {};
+    }
+
+    property.type[node.name.text] = {};
+    this.appendType_(property.type[node.name.text], node);
+  }
+
   defineVariable(/** ts.PropertyDeclaration */node) {
     let variable = this.initNodeNamespace_(node, NodeKind.VARIABLE);
     variable.qualifiedName = Parser.getNamespaceName(node);
@@ -333,9 +346,9 @@ class Parser {
         '>';
     }
 
-    let matchesObject = type.match(/^\{\[\s*?[a-zA-Z0-9_]+\s*?:\s*?([a-z]+)\s*?]\s*?:\s*?([a-zA-Z\._]+)\s*?}$/)
+    let matchesObject = type.match(/^\{\[\s*?[a-zA-Z0-9_]+\s*?:\s*?([a-z]+)\s*?]\s*?:\s*?([a-zA-Z\._\[\]]+)[\s;]*?}$/);
     if (matchesObject !== null) {
-      return `Object<${Parser.convertSimpleType(matchesObject[1])},${Parser.convertSimpleType(matchesObject[2])}>`;
+      return `Object<${Parser.convertSimpleType(matchesObject[1])},${Parser.convertType(matchesObject[2], false, parentNode)}>`;
     }
 
     return Parser.convertSimpleType(type, parentNode);
