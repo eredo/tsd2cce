@@ -5,7 +5,7 @@ declare module TestModule {
   }
 
   export class TestClass implements TestInterface {
-    property:string;
+    property:{[id: string]: number};
 
     constructor(test:string);
     myMethod(paramString:string, paramNumber:number, paramClass:TestClass, itsAny:any): boolean;

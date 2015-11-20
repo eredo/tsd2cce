@@ -57,7 +57,7 @@ exports.AST = {
         property: {
           kind: NodeKind.PROPERTY,
           qualifiedName: 'TestModule.TestClass.prototype.property',
-          type: 'string'
+          type: 'Object<string,number>'
         },
 
         myMethod: {

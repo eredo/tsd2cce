@@ -333,6 +333,11 @@ class Parser {
         '>';
     }
 
+    let matchesObject = type.match(/^\{\[\s*?[a-zA-Z0-9_]+\s*?:\s*?([a-z]+)\s*?]\s*?:\s*?([a-zA-Z\._]+)\s*?}$/)
+    if (matchesObject !== null) {
+      return `Object<${Parser.convertSimpleType(matchesObject[1])},${Parser.convertSimpleType(matchesObject[2])}>`;
+    }
+
     return Parser.convertSimpleType(type, parentNode);
   }
 

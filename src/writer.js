@@ -4,7 +4,7 @@ const beautify = require('js-beautify').js_beautify;
 const NodeKind = require('./parser').NodeKind;
 
 const PROPERTIES = ['kind', 'qualifiedName', 'parameters', 'isStatic', 'type',
-  'isSpread', 'isOptional', 'extends', 'implements'];
+  'isSpread', 'isOptional', 'extends', 'implements', '#'];
 
 
 class Writer {
