@@ -1,0 +1,46 @@
+{
+  "name": "ts2cce",
+  "version": "0.1.0",
+  "description": "Converter to generate google closure compiler extern files from typescript declaration files (.d.ts).",
+  "main": "index.js",
+  "directories": {
+    "test": "test",
+    "bin": "bin"
+  },
+  "bin": {
+    "ts2cee": "./bin/ts2cee"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "dependencies": {
+    "js-beautify": "^1.5.10",
+    "optimist": "^0.6.1",
+    "typescript": "^1.6.2"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "eslint": "^1.9.0",
+    "mocha": "^2.3.4"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha test/",
+    "lint": "./node_modules/.bin/eslint -c ./.eslintrc src/**/*.js"
+  },
+  "keywords": [
+    "google",
+    "closure",
+    "compiler",
+    "closure",
+    "compiler",
+    "typescript",
+    "typescript",
+    "declaration",
+    "closure",
+    "externs",
+    "externs",
+    "d.ts"
+  ],
+  "author": "Eric Schneller <eric@schnellers.name>",
+  "license": "MIT"
+}
