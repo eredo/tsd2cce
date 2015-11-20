@@ -8,7 +8,7 @@
     "bin": "bin"
   },
   "bin": {
-    "ts2cee": "./bin/tsd2cee"
+    "tsd2cee": "./bin/tsd2cee"
   },
   "engines": {
     "node": ">=4.0.0"
