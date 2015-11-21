@@ -9,7 +9,12 @@ declare module TestModule {
     object:{
       name: string;
       data?: number;
+      subobject: {
+        subname:string;
+      }
     };
+    propFunc: (id:number) => void;
+
 
     constructor(test:string);
     myMethod(paramString:string, paramNumber:number, paramClass:TestClass, itsAny:any): boolean;
@@ -19,6 +24,9 @@ declare module TestModule {
   }
 
   export var initClass:TestClass;
+  export var initObject:{
+    data: {[id: string]: TestClass};
+  };
 
   export function func(...args:string[]): (TestClass|string);
 

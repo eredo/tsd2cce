@@ -10,6 +10,16 @@ TestModule.TestInterface = function() {};
 
 
 /**
+ * @param {(string|number)} paramString
+ * @param {number=} opt_paramNumber
+ * @param {TestModule.TestClass=} opt_paramClass
+ * @param {*=} opt_itsAny
+ * @return {(boolean|string)}
+ */
+TestModule.TestInterface.prototype.myMethod = function(paramString, opt_paramNumber, opt_paramClass, opt_itsAny) {};
+
+
+/**
  * @constructor
  * @extends {TestModule.TestInterface}
  * @param {string} test
@@ -30,25 +40,37 @@ TestModule.TestClass.prototype.property;
 
 
 /**
- * @type {{name: string, data: number=}}
+ * @type {{name: string, data: number=, subobject: {subname: string}}}
  */
 TestModule.TestClass.prototype.object;
 
 
 /**
+ * @type {function(id:number)}
+ */
+TestModule.TestClass.prototype.propFunc;
+
+
+/**
  * @param {(string|number)} paramString
- * @param {number=} paramNumber
- * @param {TestModule.TestClass=} paramClass
- * @param {*=} itsAny
+ * @param {number=} opt_paramNumber
+ * @param {TestModule.TestClass=} opt_paramClass
+ * @param {*=} opt_itsAny
  * @return {(boolean|string)}
  */
-TestModule.TestClass.prototype.myMethod = function(paramString, paramNumber, paramClass, itsAny) {};
+TestModule.TestClass.prototype.myMethod = function(paramString, opt_paramNumber, opt_paramClass, opt_itsAny) {};
 
 
 /**
  * @type {TestModule.TestClass}
  */
 TestModule.initClass;
+
+
+/**
+ * @type {{data: Object<string,TestModule.TestClass>}}
+ */
+TestModule.initObject;
 
 
 /**

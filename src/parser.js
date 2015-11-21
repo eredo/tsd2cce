@@ -18,7 +18,7 @@ const NodeKind = {
 exports.NodeKind = NodeKind;
 
 const SimpleTypes = [
-  'number', 'string', 'boolean', 'any', 'Object', 'Array'
+  'number', 'string', 'boolean', 'any', 'Object', 'Array', 'void'
 ];
 
 
@@ -223,17 +223,65 @@ class Parser {
     }
 
     if (ast.type) {
-      let res = this.getTypeName(node);
+      let res = this.transformType_(node);
+      // Exclude voids
+      if (res === 'void') {
+        return ast;
+      }
+
       if (!Array.isArray(res)) {
         res = [res];
       }
 
       Array.prototype.push.apply(ast.type, res);
     } else {
-      ast.type = this.getTypeName(node);
+      let type = this.transformType_(node);
+      // Exclude voids
+      if (type === 'void') {
+        return ast;
+      }
+
+      ast.type = type;
     }
 
     return ast;
+  }
+
+  transformType_(node) {
+    if (node.type && Array.isArray(node.type.parameters)) {
+      // Transform a function expression type
+      let funcNode = {};
+      funcNode.kind = NodeKind.FUNCTION;
+      funcNode.parameters = this.getParameters_(node.type);
+      this.appendType_(funcNode, node.type);
+
+      // Function declarations within arguments "function()=" will cause a warning
+      // therefore we just return "function" as a type
+      if (funcNode.parameters.length === 0 && !funcNode.type) {
+        return 'function';
+      }
+
+      return `function(${funcNode.parameters.map(p => p.name + ':' + p.type).join(',')})${funcNode.type ? ':' + funcNode.type : ''}`;
+    }
+
+    // Transform an object type
+    if (node.type && node.type.members && node.type.members.length) {
+      // Transform an object map
+      if (node.type.members[0].parameters) {
+        return `Object<${this.getTypeName(node.type.members[0].parameters[0])},${this.getTypeName(node.type.members[0])}>`;
+      }
+
+      let type = {};
+
+      node.type.members.forEach((member) => {
+        type[member.name.text] = {};
+        this.appendType_(type[member.name.text], member);
+      });
+
+      return type;
+    }
+
+    return this.getTypeName(node);
   }
 
   /**
@@ -246,10 +294,25 @@ class Parser {
       return [];
     }
 
+    let startOptionals = false;
     return node.parameters.map((param) => {
       return this.appendType_({
         name: param.name.text
       }, param);
+    }).map((param) => {
+      // TODO: Implement a better way to detect when to start setting
+      // parameters to optional.
+      startOptionals = startOptionals || param.isOptional;
+
+      if (startOptionals) {
+        param.isOptional = true;
+      }
+
+      if (param.isOptional && param.name.substr(0, 4) !== 'opt_') {
+        param.name = 'opt_' + param.name;
+      }
+
+      return param;
     });
   }
 
@@ -314,7 +377,33 @@ class Parser {
   }
 
   definePropertySignature(/** ts.PropertySignature */node) {
-    let property = this.initNodeMemberNamespace_(node.parent.parent, NodeKind.PROPERTY);
+    let property;
+
+    switch (node.parent.parent.kind) {
+      case ts.SyntaxKind.PropertyDeclaration:
+        //property = this.initNodeMemberNamespace_(node.parent.parent, NodeKind.PROPERTY);
+        break;
+      case ts.SyntaxKind.VariableDeclaration:
+        //property = this.getNamespace_(Parser.getNamespaceName(node.parent.parent, false));
+        break;
+      case ts.SyntaxKind.MethodDeclaration:
+        if (this.isStatic(node.parent.parent)) {
+          property = this.getNamespace_(Parser.getNamespaceName(node.parent.parent, false));
+        } else {
+          property = this.initNodeMemberNamespace_(node.parent.parent, NodeKind.METHOD);
+        }
+        break;
+      //default:
+      //  console.log('Skipping signature', node.parent.parent.kind);
+        //throw new Error('Unknown property signature container:' +
+        //  node.parent.parent.kind);
+    }
+
+    if (!property) {
+      // Skipping this signature. This happens in parameters
+      return;
+    }
+
     if (typeof property.type !== 'object') {
       property.type = {};
     }
@@ -455,11 +544,24 @@ class Parser {
     }
 
     let length = Math.max(params1.length, params2.length);
+    let optional = false;
 
     for (let i = 0; i < length; i++) {
       if (!params1[i]) {
+        if (optional) {
+          params2[i].isOptional = true;
+
+          if (params2[i].name.substr(0, 4) !== 'opt_') {
+            params2[i].name = 'opt_' + params2[i].name;
+          }
+        }
+
         params1[i] = params2[i];
       } else {
+        if (params1[i].isOptional) {
+          optional = true;
+        }
+
         if (params2[i]) {
           if (!Array.isArray(params1[i].type)) {
             params1[i].type = [params1[i].type];
@@ -468,6 +570,10 @@ class Parser {
           params1[i].type.push(params2[i].type);
         } else {
           params1[i].isOptional = true;
+
+          if (params1[i].name.substr(0, 4) !== 'opt_') {
+            params1[i].name = 'opt_' + params1[i].name;
+          }
         }
       }
     }

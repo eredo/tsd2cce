@@ -59,7 +59,9 @@ class Writer {
       }
     }
 
-    if (node.kind === NodeKind.CLASS && node['#']) {
+    if ((node.kind === NodeKind.CLASS || node.kind === NodeKind.INTERFACE) &&
+      node['#']) {
+
       for (let key in node['#']) {
         this.traverse_(node['#'][key], key);
       }

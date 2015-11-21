@@ -23,17 +23,17 @@ exports.AST = {
               type: ['string', 'number']
             },
             {
-              name: 'paramNumber',
+              name: 'opt_paramNumber',
               type: 'number',
               isOptional: true
             },
             {
-              name: 'paramClass',
+              name: 'opt_paramClass',
               type: 'TestModule.TestClass',
               isOptional: true
             },
             {
-              name: 'itsAny',
+              name: 'opt_itsAny',
               type: '*',
               isOptional: true
             }
@@ -70,8 +70,21 @@ exports.AST = {
             data: {
               type: 'number',
               isOptional: true
+            },
+            subobject: {
+              type: {
+                subname: {
+                  type: 'string'
+                }
+              }
             }
           }
+        },
+
+        propFunc: {
+          kind: NodeKind.PROPERTY,
+          qualifiedName: 'TestModule.TestClass.prototype.propFunc',
+          type: 'function(id:number)'
         },
 
         myMethod: {
@@ -85,17 +98,17 @@ exports.AST = {
               type: ['string', 'number']
             },
             {
-              name: 'paramNumber',
+              name: 'opt_paramNumber',
               type: 'number',
               isOptional: true
             },
             {
-              name: 'paramClass',
+              name: 'opt_paramClass',
               type: 'TestModule.TestClass',
               isOptional: true
             },
             {
-              name: 'itsAny',
+              name: 'opt_itsAny',
               type: '*',
               isOptional: true
             }
@@ -116,6 +129,16 @@ exports.AST = {
       kind: NodeKind.VARIABLE,
       qualifiedName: 'TestModule.initClass',
       type: 'TestModule.TestClass'
+    },
+
+    initObject: {
+      kind: 7,
+      qualifiedName: 'TestModule.initObject',
+      type: {
+        data: {
+          type: 'Object<string,TestModule.TestClass>'
+        }
+      }
     },
 
     func: {
