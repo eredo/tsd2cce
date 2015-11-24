@@ -1,7 +1,14 @@
 {
   "name": "tsd2cce",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Converter to generate google closure compiler extern files from typescript declaration files (.d.ts).",
+  "bugs": {
+    "url": "https://github.com/eredo/tsd2cce/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eredo/tsd2cce.git"
+  },
   "main": "index.js",
   "directories": {
     "test": "test",
